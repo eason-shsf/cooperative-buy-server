@@ -1,6 +1,9 @@
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
 const route = require('koa-route');
+const https = require('https');
+const fs = require('fs');
+const enforceHttps = require('koa-sslify');
 
 const app = new Koa();
 app.use(bodyParser());
@@ -40,4 +43,15 @@ app.use(route.post('/join', joinBill));
 app.use(route.post('/leave', leaveBill));
 app.use(route.post('/getBill', getBill));
 app.use(route.post('/inBill', inBill));
-app.listen(5000);
+
+// Force HTTPS on all page
+app.use(enforceHttps());
+// SSL options
+var options = {
+    key: fs.readFileSync('./certification/yujunhua.top.key'),  //ssl文件路径
+    cert: fs.readFileSync('./certification/yujunhua.top.cer')  //ssl文件路径
+};
+
+// start the server
+// http.createServer(app.callback()).listen(3000);
+https.createServer(options, app.callback()).listen(443);
