@@ -131,6 +131,12 @@ class BillController {
             })
         }
     }
+
+    uploadImg(ctx) {
+        const ctxBody = ctx.request.body;
+        const billId = ctxBody['billId'];
+        debugger;
+    }
 }
 
 module.exports = BillController
